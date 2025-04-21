@@ -1,0 +1,39 @@
+name: Fetch and build Budgy layout
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-build-budgy-layout:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v4
+
+      - name: Download Budgy config.h
+        run: |
+          mkdir -p budgy
+          curl -L https://raw.githubusercontent.com/qmk/qmk_firmware/master/keyboards/budgy/config.h -o budgy/config.h
+
+      - name: Append custom config values
+        run: |
+          cat << 'EOF' >> budgy/config.h
+
+          #undef TAPPING_TERM
+          #define TAPPING_TERM 220
+          #define QUICK_TAP_TERM 0
+          #define COMBO_COUNT 4
+          #define TAPPING_TERM_PER_KEY
+          EOF
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git add .
+          git commit -m "✨(budgy): Update config from QMK master" || echo "No layout change"
+          git push
