@@ -14,10 +14,11 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v4
 
-      - name: Download Budgy config.h
+      - name: Download Budgy config
         run: |
           mkdir -p budgy
           curl -L https://raw.githubusercontent.com/qmk/qmk_firmware/master/keyboards/budgy/config.h -o budgy/config.h
+          curl -L https://raw.githubusercontent.com/qmk/qmk_firmware/master/keyboards/budgy/keyboard.json -o budgy/keyboard.json
 
       - name: Append custom config values
         run: |
