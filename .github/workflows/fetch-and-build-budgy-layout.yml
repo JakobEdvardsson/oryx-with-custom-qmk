@@ -31,10 +31,26 @@ jobs:
           #define TAPPING_TERM_PER_KEY
           EOF
 
+      - name: Create rules.mk
+        run: |
+          cat << 'EOF' >> budgy/rules.mk
+          TAP_DANCE_ENABLE = yes
+          CAPS_WORD_ENABLE = yes
+          COMBO_ENABLE = yes
+          EOF
+
+      - name: Copy i18n.h
+        run: |
+          cp 34RRD/i18n.h budgy/i18n.h
+
+      - name: Copy keymap.c
+        run: |
+          cp 34RRD/keymap.c budgy/keymap.c
+
       - name: Commit and Push changes
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
           git add .
-          git commit -m "✨(budgy): Update config from QMK master" || echo "No layout change"
+          git commit -m "✨(budgy): Update config" || echo "No layout change"
           git push
