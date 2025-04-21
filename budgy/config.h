@@ -1,0 +1,20 @@
+// Copyright 2022 KeyboardDweebs (@doesntfazer)
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#pragma once
+
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 1000U
+
+
+#define SERIAL_USART_FULL_DUPLEX
+#define SERIAL_USART_TX_PIN GP1
+#define SERIAL_USART_RX_PIN GP0
+
+// #define SERIAL_USART_PIN_SWAP
+
+#undef TAPPING_TERM
+#define TAPPING_TERM 220
+#define QUICK_TAP_TERM 0
+#define COMBO_COUNT 4
+#define TAPPING_TERM_PER_KEY
