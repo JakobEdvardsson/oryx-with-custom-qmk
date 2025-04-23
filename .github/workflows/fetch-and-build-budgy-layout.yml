@@ -76,7 +76,7 @@ jobs:
           # Copy layout files to the qmk folder
           rm -rf qmk_firmware/keyboards/budgy
           mkdir -p qmk_firmware/keyboards/budgy
-          cp -r budgy qmk_firmware/keyboards/budgy
+          cp -r budgy qmk_firmware/keyboards/
           
           # Build the layout
           docker run -v ./qmk_firmware:/root --rm qmk /bin/sh -c "
