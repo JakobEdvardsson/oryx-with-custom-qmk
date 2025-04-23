@@ -71,6 +71,7 @@ jobs:
         run: |
           # Copy layout files to the qmk folder
           rm -rf qmk_firmware/keyboards/budgy
+          mkdir -p qmk_firmware/keyboards/budgy
           cp -r budgy qmk_firmware/keyboards/budgy
           
           # Build the layout
