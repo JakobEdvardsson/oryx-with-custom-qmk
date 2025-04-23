@@ -14,6 +14,10 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v4
 
+      - name: Update QMK firmware submodule
+        run: |
+          git submodule update --init --recursive --depth=1
+
       - name: Download Budgy config
         run: |
           mkdir -p budgy
@@ -33,7 +37,7 @@ jobs:
 
       - name: Create rules.mk
         run: |
-          cat << 'EOF' >> budgy/rules.mk
+          cat << 'EOF' > budgy/rules.mk
           TAP_DANCE_ENABLE = yes
           CAPS_WORD_ENABLE = yes
           COMBO_ENABLE = yes
