@@ -41,11 +41,15 @@ jobs:
 
       - name: Copy i18n.h
         run: |
-          cp 34RRD/i18n.h budgy/i18n.h
+          cp 34RRD/i18n.h budgy/keymaps/moonlander/i18n.h
 
       - name: Copy keymap.c
         run: |
-          cp 34RRD/keymap.c budgy/keymap.c
+          cp 34RRD/keymap.c budgy/keymaps/moonlander/keymap.c
+
+      - name: Parse moonlander keymap
+        run: |
+          python3 moonlander_budgy_parser.py
 
       - name: Parse moonlander keymap
         run: |
@@ -58,6 +62,20 @@ jobs:
           git add .
           git commit -m "✨(budgy): Update config" || echo "No layout change"
           git push
+
+      - name: Update QMK firmware submodule to latest version (${{ steps.download-layout-source.outputs.firmware_version }})
+        run: |
+          git submodule update --init --remote --depth=1
+          cd qmk_firmware
+          git checkout -B firmware${{ steps.download-layout-source.outputs.firmware_version }} origin/firmware${{ steps.download-layout-source.outputs.firmware_version }}
+          git submodule update --init --recursive
+          cd ..
+          git add qmk_firmware
+          git commit -m "✨(qmk): Update firmware" || echo "No QMK change"
+          git push
+
+      - name: Build qmk docker image
+        run: docker build -t qmk .
 
       - name: Build the budgy layout
         id: budgy-build-layout
