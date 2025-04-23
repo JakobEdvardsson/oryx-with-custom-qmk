@@ -47,6 +47,10 @@ jobs:
         run: |
           cp 34RRD/keymap.c budgy/keymap.c
 
+      - name: Parse moonlander keymap
+        run: |
+          python3 moonlander_budgy_parser.py
+
       - name: Commit and Push changes
         run: |
           git config --local user.name "github-actions"
@@ -54,3 +58,27 @@ jobs:
           git add .
           git commit -m "✨(budgy): Update config" || echo "No layout change"
           git push
+
+      - name: Build the budgy layout
+        id: budgy-build-layout
+        run: |
+          # Copy layout files to the qmk folder
+          rm -rf qmk_firmware/keyboards/budgy
+          cp -r budgy qmk_firmware/keyboards/budgy
+          
+          # Build the layout
+          docker run -v ./qmk_firmware:/root --rm qmk /bin/sh -c "
+            qmk setup budgy -y
+            qmk compile -kb budgy -km moonlander
+          "
+          
+          # Find and export built layout          
+          # budgy_moonlander.uf2
+
+          echo budgy_built_layout_file=./qmk_firmware/budgy_moonlander.uf2 >> "$GITHUB_OUTPUT"
+
+      - name: Upload budgy layout
+        uses: actions/upload-artifact@v4
+        with:
+          name: budgy_moonlander
+          path: ${{ steps.budgy-build-layout.outputs.budgy_built_layout_file }}

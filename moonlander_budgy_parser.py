@@ -154,7 +154,8 @@ def main():
 
     final_layout = re.sub(pattern, "", without_rgb, flags=re.DOTALL)
 
-    print(final_layout)
+    with open('budgy/keymaps/moonlander/keymap.c', 'w') as f:
+        f.write(final_layout)
 
 
 if __name__ == "__main__":
